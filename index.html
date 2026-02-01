@@ -17,13 +17,13 @@
             background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px);
             padding: 40px; border-radius: 30px; box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
             text-align: center; border: 1px solid rgba(255, 255, 255, 0.6);
-            max-width: 400px; width: 90%; animation: fadeIn 1.5s ease-out; z-index: 2;
+            max-width: 400px; width: 90%; z-index: 2;
         }
 
         .photo-frame {
             background: white; padding: 12px 12px 45px 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15); transform: rotate(-3deg);
-            margin-bottom: 30px; transition: 0.5s;
+            margin-bottom: 30px;
         }
 
         .photo-frame img {
@@ -42,13 +42,14 @@
 
         #yesBtn { background-color: #ff4d6d; color: white; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4); z-index: 1000; }
 
-        #noBtn { background-color: white; color: #ff4d6d; border: 1px solid #ff4d6d; position: absolute; transition: 0.1s; }
+        #noBtn { 
+            background-color: white; color: #ff4d6d; border: 1px solid #ff4d6d; 
+            position: relative; /* Starts in the box */
+            z-index: 999;
+        }
 
         #success-msg { display: none; }
-
-        #typewriter { font-size: 1.2rem; color: #d81b60; min-height: 1.5em; margin-top: 10px; font-weight: 500; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        #typewriter { font-size: 1.2rem; color: #d81b60; margin-top: 10px; font-weight: 500; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -85,19 +86,26 @@
         const guiltMessages = ["No", "Are you sure?", "Pookie please", "Don't do this :(", "You're breaking my heart", "I'm gonna cry...", "Okay now you're just being mean", "PLEASEEE"];
 
         noBtn.addEventListener('mouseover', () => {
-            // Move No Button
-            const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-            const x = Math.max(20, Math.floor(Math.random() * maxX));
-            const y = Math.max(20, Math.floor(Math.random() * maxY));
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
+            // 1. Switch to absolute positioning so it can fly around
+            noBtn.style.position = 'absolute';
 
-            // Grow Yes Button
+            // 2. Calculate "Safe Zone" boundaries (50px padding from edges)
+            const padding = 50;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+            // 3. Generate random coordinates within that safe zone
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+
+            // 4. Grow Yes Button
             yesScale += 0.2;
             yesBtn.style.transform = `scale(${yesScale})`;
 
-            // Change No Text
+            // 5. Update Guilt Text
             if (noClickCount < guiltMessages.length - 1) {
                 noClickCount++;
                 noBtn.innerText = guiltMessages[noClickCount];
@@ -107,7 +115,7 @@
         yesBtn.addEventListener('click', () => {
             card.style.display = 'none';
             success.style.display = 'block';
-            music.play(); // Start 505
+            music.play();
             launchHearts();
             typeWriter("I'm going back to 505... if it's a 7 hour flight or a 45 minute drive. I love you! ❤️", 0);
         });
@@ -121,10 +129,9 @@
 
         function launchHearts() {
             const end = Date.now() + (15 * 1000);
-            const colors = ['#ff4d6d', '#ff8fa3', '#ffb3c1'];
             (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors, shapes: ['heart'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors, shapes: ['heart'] });
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d6d', '#ffb3c1'], shapes: ['heart'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d6d', '#ffb3c1'], shapes: ['heart'] });
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
         }
