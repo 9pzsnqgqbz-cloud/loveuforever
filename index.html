@@ -123,43 +123,59 @@
         <h1>Yay! I love you! ❤️</h1>
         <p>I can't wait to spend the day with you.</p>
     </div>
+<script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const card = document.getElementById('main-card');
+    const success = document.getElementById('success-msg');
 
-    <script>
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-        const card = document.getElementById('main-card');
-        const success = document.getElementById('success-msg');
+    noBtn.addEventListener('mouseover', () => {
+        // Calculate the available space (Screen size minus button size)
+        // We subtract an extra 20px to keep it away from the very edge
+        const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+        const maxY = window.innerHeight - noBtn.offsetHeight - 20;
 
-        noBtn.addEventListener('mouseover', () => {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
-        });
+        // Ensure the random number is at least 20px so it doesn't hit the left/top
+        const x = Math.max(20, Math.floor(Math.random() * maxX));
+        const y = Math.max(20, Math.floor(Math.random() * maxY));
 
-        yesBtn.addEventListener('click', () => {
-            card.style.display = 'none';
-            success.style.display = 'block';
-            launchHearts();
-        });
+        noBtn.style.left = `${x}px`;
+        noBtn.style.top = `${y}px`;
+    });
 
-        function launchHearts() {
-            const end = Date.now() + (10 * 1000);
-            const colors = ['#ff4d6d', '#ff8fa3', '#ffb3c1'];
+    yesBtn.addEventListener('click', () => {
+        card.style.display = 'none';
+        success.style.display = 'block';
+        launchHearts();
+    });
 
-            (function frame() {
-              confetti({
-                particleCount: 3,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: colors,
-                shapes: ['heart']
-              });
-              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors, shapes: ['heart'] });
-              if (Date.now() < end) requestAnimationFrame(frame);
-            }());
-        }
-    </script>
+    function launchHearts() {
+        const end = Date.now() + (10 * 1000);
+        const colors = ['#ff4d6d', '#ff8fa3', '#ffb3c1'];
+
+        (function frame() {
+          confetti({
+            particleCount: 3,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: colors,
+            shapes: ['heart']
+          });
+          confetti({
+            particleCount: 3,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: colors,
+            shapes: ['heart']
+          });
+
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        }());
+    }
+</script>
 </body>
 </html>
