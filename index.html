@@ -140,99 +140,104 @@
         <h1>I knew it! ❤️</h1>
         <div id="typewriter"></div>
     </div>
+<script>
+    // Password Logic
+    const loginBtn = document.getElementById('loginBtn');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginScreen = document.getElementById('login-screen');
+    const mainCard = document.getElementById('main-card');
+    const error = document.getElementById('error');
 
-    <script>
-        // Password Logic
-        const loginBtn = document.getElementById('loginBtn');
-        const passwordInput = document.getElementById('passwordInput');
-        const loginScreen = document.getElementById('login-screen');
-        const mainCard = document.getElementById('main-card');
-        const error = document.getElementById('error');
-
-        loginBtn.addEventListener('click', () => {
-            if (passwordInput.value === '17112024') {
-                loginScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loginScreen.style.display = 'none';
-                    mainCard.style.display = 'block';
-                }, 800);
-            } else {
-                error.style.display = 'block';
-                passwordInput.value = '';
-            }
-        });
-
-        // Background Hearts
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-particle');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 6000);
+    loginBtn.addEventListener('click', () => {
+        if (passwordInput.value === '17112024') {
+            loginScreen.style.opacity = '0';
+            setTimeout(() => {
+                loginScreen.style.display = 'none';
+                mainCard.style.display = 'block';
+            }, 800);
+        } else {
+            error.style.display = 'block';
+            passwordInput.value = '';
         }
-        setInterval(createHeart, 450);
+    });
 
-        // Interaction Logic
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-        const success = document.getElementById('success-msg');
-        const music = document.getElementById('bgMusic');
-        const typewriterElement = document.getElementById('typewriter');
+    // Background Hearts
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart-particle');
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+        heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 450);
 
-        let yesScale = 1;
-        let noClickCount = 0;
-        const guiltMessages = ["No", "Rethink that...", "KMC boys don't give up!", "You're breaking my heart", "Wait... I'm crying", "I'll take you to 505!", "PLEASE"];
+    // Valentine Interaction Logic
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const success = document.getElementById('success-msg');
+    const music = document.getElementById('bgMusic');
+    const typewriterElement = document.getElementById('typewriter');
 
-        noBtn.addEventListener('mouseover', () => {
-            // Secure the button within the viewport
-            noBtn.style.position = 'fixed';
-            const padding = 100;
-            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-            
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+    let yesScale = 1;
+    let noClickCount = 0;
+    const guiltMessages = ["No", "Rethink that...", "KMC boys don't give up!", "You're breaking my heart", "Wait... I'm crying", "I'll take you to 505!", "PLEASE"];
 
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+    noBtn.addEventListener('mouseover', () => {
+        // Change to fixed position to stay relative to the screen
+        noBtn.style.position = 'fixed';
 
-            // Grow the Yes button
-            yesScale += 0.25;
-            yesBtn.style.transform = `scale(${yesScale})`;
+        // Define a strict safe zone (80px from every edge)
+        const offset = 80;
+        
+        // Calculate the maximum possible X and Y coordinates
+        const maxWidth = window.innerWidth - noBtn.offsetWidth - offset;
+        const maxHeight = window.innerHeight - noBtn.offsetHeight - offset;
 
-            // Change No button text
-            if (noClickCount < guiltMessages.length - 1) {
-                noClickCount++;
-                noBtn.innerText = guiltMessages[noClickCount];
-            }
-        });
+        // Force the random number to stay between the offset and the max allowed width/height
+        const randomX = Math.floor(Math.random() * (maxWidth - offset + 1)) + offset;
+        const randomY = Math.floor(Math.random() * (maxHeight - offset + 1)) + offset;
 
-        yesBtn.addEventListener('click', () => {
-            mainCard.style.display = 'none';
-            success.style.display = 'block';
-            music.play();
-            launchHearts();
-            typeWriter("I'm going back to 505... because there isn't a single place I'd rather be than with you. I love you! ❤️", 0);
-        });
+        // Apply the coordinates
+        noBtn.style.left = randomX + 'px';
+        noBtn.style.top = randomY + 'px';
 
-        function typeWriter(text, i) {
-            if (i < text.length) {
-                typewriterElement.innerHTML += text.charAt(i);
-                setTimeout(() => typeWriter(text, i + 1), 65);
-            }
+        // Grow Yes Button
+        yesScale += 0.25;
+        yesBtn.style.transform = `scale(${yesScale})`;
+
+        // Update Text
+        if (noClickCount < guiltMessages.length - 1) {
+            noClickCount++;
+            noBtn.innerText = guiltMessages[noClickCount];
         }
+    });
 
-        function launchHearts() {
-            const end = Date.now() + (15 * 1000);
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d6d', '#ffb3c1'], shapes: ['heart'] });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d6d', '#ffb3c1'], shapes: ['heart'] });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
+    yesBtn.addEventListener('click', () => {
+        mainCard.style.display = 'none';
+        success.style.display = 'block';
+        music.play();
+        launchHearts();
+        typeWriter("I'm going back to 505... because there isn't a single place I'd rather be than with you. I love you! ❤️", 0);
+    });
+
+    function typeWriter(text, i) {
+        if (i < text.length) {
+            typewriterElement.innerHTML += text.charAt(i);
+            setTimeout(() => typeWriter(text, i + 1), 65);
         }
-    </script>
+    }
+
+    function launchHearts() {
+        const end = Date.now() + (15 * 1000);
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d6d', '#ffb3c1'], shapes: ['heart'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d6d', '#ffb3c1'], shapes: ['heart'] });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
+    }
+</script>
 </body>
 </html>
