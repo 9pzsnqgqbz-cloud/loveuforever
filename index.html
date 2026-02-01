@@ -8,13 +8,10 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;500&display=swap');
 
-        /* Animated Background */
         body {
             margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
-            height: 100vh; 
-            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fce4ec, #fff1eb);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            height: 100vh; background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fce4ec, #fff1eb);
+            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
             font-family: 'Quicksand', sans-serif; overflow: hidden;
         }
 
@@ -24,105 +21,47 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Password Login Screen */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(252, 228, 236, 0.95);
-            display: flex; justify-content: center; align-items: center;
+            background: rgba(252, 228, 236, 0.95); display: flex; justify-content: center; align-items: center;
             z-index: 9999; transition: opacity 0.8s ease;
         }
 
         .login-box {
             background: white; padding: 40px; border-radius: 35px;
-            box-shadow: 0 15px 35px rgba(216, 27, 96, 0.2);
-            text-align: center; max-width: 350px; width: 85%;
+            box-shadow: 0 15px 35px rgba(216, 27, 96, 0.2); text-align: center; max-width: 350px; width: 85%;
         }
 
-        .login-box h2 { font-family: 'Dancing Script', cursive; color: #d81b60; font-size: 2rem; }
-
-        input {
-            width: 90%; padding: 15px; margin: 20px 0; border: 2px solid #fce4ec;
-            border-radius: 15px; text-align: center; font-size: 1.2rem; outline: none;
-            font-family: 'Quicksand', sans-serif; letter-spacing: 2px;
-        }
-
-        #loginBtn {
-            background: #ff4d6d; color: white; border: none; padding: 12px 30px;
-            border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 1rem;
-            transition: 0.3s;
-        }
-
-        #loginBtn:hover { transform: scale(1.05); background: #ff758f; }
-
-        /* Main Glassmorphism Container */
         .container {
-            display: none; /* Hidden until login */
-            background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px);
-            padding: 40px; border-radius: 40px; 
-            box-shadow: 20px 20px 60px #d1b8c1, -20px -20px 60px #ffffff;
-            text-align: center; border: 1px solid rgba(255, 255, 255, 0.8);
-            max-width: 400px; width: 90%; z-index: 2;
+            display: none; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px);
+            padding: 40px; border-radius: 40px; text-align: center;
+            max-width: 400px; width: 90%; position: relative; /* This is the cage for the No button */
         }
 
-        /* Polaroid Photo Frame */
-        .photo-frame {
-            background: white; padding: 12px 12px 55px 12px;
-            box-shadow: 5px 15px 30px rgba(0,0,0,0.1); transform: rotate(-2deg);
-            margin-bottom: 30px; transition: 0.4s ease-in-out;
-        }
+        .photo-frame { background: white; padding: 12px 12px 55px 12px; transform: rotate(-2deg); margin-bottom: 30px; }
+        .photo-frame img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        h1 { font-family: 'Dancing Script', cursive; color: #d81b60; font-size: 2.5rem; }
 
-        .photo-frame:hover { transform: rotate(0deg) scale(1.05); }
+        .btn-group { display: flex; justify-content: center; gap: 20px; margin-top: 30px; height: 60px; position: relative; }
 
-        .photo-frame img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 2px; }
-
-        h1 { font-family: 'Dancing Script', cursive; color: #d81b60; font-size: 2.5rem; margin: 10px 0; }
-
-        /* Buttons and Animations */
-        .btn-group { display: flex; justify-content: center; gap: 20px; margin-top: 30px; height: 60px; align-items: center; }
-
-        #yesBtn { 
-            background: #ff4d6d; color: white; border: none; padding: 15px 30px; 
-            border-radius: 30px; font-weight: 600; cursor: pointer; font-size: 1.1rem;
-            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3); z-index: 1000;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        #noBtn { 
-            background: white; color: #ff4d6d; border: 2px solid #ff4d6d; 
-            padding: 12px 25px; border-radius: 30px; cursor: pointer;
-            position: relative; transition: 0.1s ease-out; z-index: 999;
-        }
+        #yesBtn { background: #ff4d6d; color: white; border: none; padding: 15px 30px; border-radius: 30px; cursor: pointer; z-index: 10; }
+        #noBtn { background: white; color: #ff4d6d; border: 2px solid #ff4d6d; padding: 12px 25px; border-radius: 30px; cursor: pointer; position: absolute; transition: 0.1s ease; }
 
         #success-msg { display: none; }
-        #typewriter { font-size: 1.15rem; color: #d81b60; margin-top: 15px; font-weight: 500; line-height: 1.6; }
-
-        /* Floating background particles */
-        .heart-particle {
-            position: absolute; bottom: -10px; color: rgba(255, 77, 109, 0.3);
-            animation: float 6s linear infinite; z-index: 1;
-        }
-        @keyframes float { to { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
+        #typewriter { font-size: 1.15rem; color: #d81b60; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" preload="auto" loop>
         <source src="https://www.myinstants.com/media/sounds/arctic-monkeys-505-lyrics.mp3" type="audio/mpeg">
     </audio>
 
     <div id="login-screen">
         <div class="login-box">
             <h2>Enter the Magic Code ❤️</h2>
-            <p style="font-size: 0.85rem; color: #888;">Format: DDMMYYYY</p>
-            <input type="password" id="passwordInput" placeholder="Our special date">
+            <input type="password" id="passwordInput" placeholder="DDMMYYYY">
             <button id="loginBtn">Unlock My Heart</button>
-            <p id="error" style="color: #ff4d6d; font-size: 0.9rem; margin-top: 15px; display: none;">Oops! Try again Pookie.</p>
         </div>
     </div>
 
@@ -131,7 +70,7 @@
         <h1>Will you be my Valentine?</h1>
         <div class="btn-group">
             <button id="yesBtn">Yes!</button>
-            <button id="noBtn">No</button>
+            <button id="noBtn" style="right: 50px;">No</button>
         </div>
     </div>
 
@@ -140,104 +79,57 @@
         <h1>I knew it! ❤️</h1>
         <div id="typewriter"></div>
     </div>
-<script>
-    // Password Logic
-    const loginBtn = document.getElementById('loginBtn');
-    const passwordInput = document.getElementById('passwordInput');
-    const loginScreen = document.getElementById('login-screen');
-    const mainCard = document.getElementById('main-card');
-    const error = document.getElementById('error');
 
-    loginBtn.addEventListener('click', () => {
-        if (passwordInput.value === '17112024') {
-            loginScreen.style.opacity = '0';
-            setTimeout(() => {
-                loginScreen.style.display = 'none';
-                mainCard.style.display = 'block';
-            }, 800);
-        } else {
-            error.style.display = 'block';
-            passwordInput.value = '';
-        }
-    });
-
-    // Background Hearts
-    function createHeart() {
-        const heart = document.createElement('div');
-        heart.classList.add('heart-particle');
-        heart.innerHTML = '❤️';
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-        heart.style.animationDuration = Math.random() * 3 + 4 + 's';
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 6000);
-    }
-    setInterval(createHeart, 450);
-
-    // Valentine Interaction Logic
-    const noBtn = document.getElementById('noBtn');
-    const yesBtn = document.getElementById('yesBtn');
-    const success = document.getElementById('success-msg');
-    const music = document.getElementById('bgMusic');
-    const typewriterElement = document.getElementById('typewriter');
-
-    let yesScale = 1;
-    let noClickCount = 0;
-    const guiltMessages = ["No", "Rethink that...", "KMC boys don't give up!", "You're breaking my heart", "Wait... I'm crying", "I'll take you to 505!", "PLEASE"];
-
-    noBtn.addEventListener('mouseover', () => {
-        // Change to fixed position to stay relative to the screen
-        noBtn.style.position = 'fixed';
-
-        // Define a strict safe zone (80px from every edge)
-        const offset = 80;
+    <script>
+        const music = document.getElementById('bgMusic');
         
-        // Calculate the maximum possible X and Y coordinates
-        const maxWidth = window.innerWidth - noBtn.offsetWidth - offset;
-        const maxHeight = window.innerHeight - noBtn.offsetHeight - offset;
+        // Login Logic
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            if (document.getElementById('passwordInput').value === '17112024') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-card').style.display = 'block';
+                // Pre-warm the audio (muted) so it can play later
+                music.play().then(() => music.pause());
+            }
+        });
 
-        // Force the random number to stay between the offset and the max allowed width/height
-        const randomX = Math.floor(Math.random() * (maxWidth - offset + 1)) + offset;
-        const randomY = Math.floor(Math.random() * (maxHeight - offset + 1)) + offset;
+        // Safe "No" Button Logic
+        const noBtn = document.getElementById('noBtn');
+        const container = document.getElementById('main-card');
 
-        // Apply the coordinates
-        noBtn.style.left = randomX + 'px';
-        noBtn.style.top = randomY + 'px';
+        noBtn.addEventListener('mouseover', () => {
+            // Get dimensions of the container (the "cage")
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
 
-        // Grow Yes Button
-        yesScale += 0.25;
-        yesBtn.style.transform = `scale(${yesScale})`;
+            // Calculate random position inside the container ONLY
+            const maxX = containerRect.width - btnRect.width - 20;
+            const maxY = containerRect.height - btnRect.height - 20;
 
-        // Update Text
-        if (noClickCount < guiltMessages.length - 1) {
-            noClickCount++;
-            noBtn.innerText = guiltMessages[noClickCount];
-        }
-    });
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
 
-    yesBtn.addEventListener('click', () => {
-        mainCard.style.display = 'none';
-        success.style.display = 'block';
-        music.play();
-        launchHearts();
-        typeWriter("I'm going back to 505... because there isn't a single place I'd rather be than with you. I love you! ❤️", 0);
-    });
+            // Move the button relative to the container
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
 
-    function typeWriter(text, i) {
-        if (i < text.length) {
-            typewriterElement.innerHTML += text.charAt(i);
-            setTimeout(() => typeWriter(text, i + 1), 65);
-        }
-    }
+            // Grow Yes button
+            const yesBtn = document.getElementById('yesBtn');
+            const currentScale = parseFloat(yesBtn.style.transform.replace('scale(', '')) || 1;
+            yesBtn.style.transform = `scale(${currentScale + 0.2})`;
+        });
 
-    function launchHearts() {
-        const end = Date.now() + (15 * 1000);
-        (function frame() {
-            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d6d', '#ffb3c1'], shapes: ['heart'] });
-            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d6d', '#ffb3c1'], shapes: ['heart'] });
-            if (Date.now() < end) requestAnimationFrame(frame);
-        }());
-    }
-</script>
-</body>
-</html>
+        // Yes Button Logic
+        document.getElementById('yesBtn').addEventListener('click', () => {
+            document.getElementById('main-card').style.display = 'none';
+            document.getElementById('success-msg').style.display = 'block';
+            
+            // Play Audio (Now allowed because of user click)
+            music.currentTime = 0;
+            music.volume = 1.0;
+            music.play().catch(e => console.log("Audio play failed:", e));
+
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, shapes: ['heart'] });
+            
+            let i = 0;
+            const text = "I'm going back to 505... if it's a 7 hour flight
